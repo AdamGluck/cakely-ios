@@ -14,13 +14,16 @@
 		0F6678661895AF25006F27D3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6678651895AF25006F27D3 /* main.m */; };
 		0F66786A1895AF25006F27D3 /* CKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6678691895AF25006F27D3 /* CKAppDelegate.m */; };
 		0F66786D1895AF25006F27D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F66786B1895AF25006F27D3 /* Main.storyboard */; };
-		0F6678701895AF25006F27D3 /* CKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F66786F1895AF25006F27D3 /* CKViewController.m */; };
+		0F6678701895AF25006F27D3 /* CKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F66786F1895AF25006F27D3 /* CKLoginViewController.m */; };
 		0F6678721895AF25006F27D3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F6678711895AF25006F27D3 /* Images.xcassets */; };
 		0F6678791895AF25006F27D3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6678781895AF25006F27D3 /* XCTest.framework */; };
 		0F66787A1895AF25006F27D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6678591895AF25006F27D3 /* Foundation.framework */; };
 		0F66787B1895AF25006F27D3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F66785D1895AF25006F27D3 /* UIKit.framework */; };
 		0F6678831895AF25006F27D3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0F6678811895AF25006F27D3 /* InfoPlist.strings */; };
 		0F6678851895AF25006F27D3 /* cakelyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6678841895AF25006F27D3 /* cakelyTests.m */; };
+		0F6679AC1895B203006F27D3 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F66788F1895B201006F27D3 /* FacebookSDK.framework */; };
+		0F667A781895B6AE006F27D3 /* CKHeadlinesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F667A771895B6AE006F27D3 /* CKHeadlinesViewController.m */; };
+		0F667A801895C126006F27D3 /* DuruSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F667A7B1895C0F0006F27D3 /* DuruSans-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +48,18 @@
 		0F6678681895AF25006F27D3 /* CKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKAppDelegate.h; sourceTree = "<group>"; };
 		0F6678691895AF25006F27D3 /* CKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKAppDelegate.m; sourceTree = "<group>"; };
 		0F66786C1895AF25006F27D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		0F66786E1895AF25006F27D3 /* CKViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKViewController.h; sourceTree = "<group>"; };
-		0F66786F1895AF25006F27D3 /* CKViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKViewController.m; sourceTree = "<group>"; };
+		0F66786E1895AF25006F27D3 /* CKLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKLoginViewController.h; sourceTree = "<group>"; };
+		0F66786F1895AF25006F27D3 /* CKLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKLoginViewController.m; sourceTree = "<group>"; };
 		0F6678711895AF25006F27D3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0F6678771895AF25006F27D3 /* cakelyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cakelyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F6678781895AF25006F27D3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0F6678801895AF25006F27D3 /* cakelyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cakelyTests-Info.plist"; sourceTree = "<group>"; };
 		0F6678821895AF25006F27D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0F6678841895AF25006F27D3 /* cakelyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cakelyTests.m; sourceTree = "<group>"; };
+		0F66788F1895B201006F27D3 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		0F667A761895B6AE006F27D3 /* CKHeadlinesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKHeadlinesViewController.h; sourceTree = "<group>"; };
+		0F667A771895B6AE006F27D3 /* CKHeadlinesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKHeadlinesViewController.m; sourceTree = "<group>"; };
+		0F667A7B1895C0F0006F27D3 /* DuruSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DuruSans-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +68,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F66785C1895AF25006F27D3 /* CoreGraphics.framework in Frameworks */,
+				0F6679AC1895B203006F27D3 /* FacebookSDK.framework in Frameworks */,
 				0F66785E1895AF25006F27D3 /* UIKit.framework in Frameworks */,
 				0F66785A1895AF25006F27D3 /* Foundation.framework in Frameworks */,
 			);
@@ -101,6 +109,7 @@
 		0F6678581895AF25006F27D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0F66788F1895B201006F27D3 /* FacebookSDK.framework */,
 				0F6678591895AF25006F27D3 /* Foundation.framework */,
 				0F66785B1895AF25006F27D3 /* CoreGraphics.framework */,
 				0F66785D1895AF25006F27D3 /* UIKit.framework */,
@@ -115,8 +124,10 @@
 				0F6678681895AF25006F27D3 /* CKAppDelegate.h */,
 				0F6678691895AF25006F27D3 /* CKAppDelegate.m */,
 				0F66786B1895AF25006F27D3 /* Main.storyboard */,
-				0F66786E1895AF25006F27D3 /* CKViewController.h */,
-				0F66786F1895AF25006F27D3 /* CKViewController.m */,
+				0F667A761895B6AE006F27D3 /* CKHeadlinesViewController.h */,
+				0F667A771895B6AE006F27D3 /* CKHeadlinesViewController.m */,
+				0F66786E1895AF25006F27D3 /* CKLoginViewController.h */,
+				0F66786F1895AF25006F27D3 /* CKLoginViewController.m */,
 				0F6678711895AF25006F27D3 /* Images.xcassets */,
 				0F6678601895AF25006F27D3 /* Supporting Files */,
 			);
@@ -126,6 +137,7 @@
 		0F6678601895AF25006F27D3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0F667A7B1895C0F0006F27D3 /* DuruSans-Regular.ttf */,
 				0F6678611895AF25006F27D3 /* cakely-Info.plist */,
 				0F6678621895AF25006F27D3 /* InfoPlist.strings */,
 				0F6678651895AF25006F27D3 /* main.m */,
@@ -212,6 +224,7 @@
 			knownRegions = (
 				en,
 				Base,
+				he,
 			);
 			mainGroup = 0F66784D1895AF25006F27D3;
 			productRefGroup = 0F6678571895AF25006F27D3 /* Products */;
@@ -229,6 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F667A801895C126006F27D3 /* DuruSans-Regular.ttf in Resources */,
 				0F6678721895AF25006F27D3 /* Images.xcassets in Resources */,
 				0F6678641895AF25006F27D3 /* InfoPlist.strings in Resources */,
 				0F66786D1895AF25006F27D3 /* Main.storyboard in Resources */,
@@ -250,9 +264,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F667A781895B6AE006F27D3 /* CKHeadlinesViewController.m in Sources */,
 				0F66786A1895AF25006F27D3 /* CKAppDelegate.m in Sources */,
 				0F6678661895AF25006F27D3 /* main.m in Sources */,
-				0F6678701895AF25006F27D3 /* CKViewController.m in Sources */,
+				0F6678701895AF25006F27D3 /* CKLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,9 +394,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/adamgluck/Desktop/DDeveloper/cakely-ios/cakely/FacebookSDK",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cakely/cakely-Prefix.pch";
 				INFOPLIST_FILE = "cakely/cakely-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -392,9 +412,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/adamgluck/Desktop/DDeveloper/cakely-ios/cakely/FacebookSDK",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cakely/cakely-Prefix.pch";
 				INFOPLIST_FILE = "cakely/cakely-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
