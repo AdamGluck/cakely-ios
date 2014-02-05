@@ -10,6 +10,14 @@
 
 @interface CKHeadlinesViewController () <UIGestureRecognizerDelegate>
 
+@property (strong, nonatomic) UIFont * headlineFont;
+@property (strong, nonatomic) UIColor * headlineColor;
+
+@property (strong, nonatomic) UIFont * tagsFont;
+@property (strong, nonatomic) UIColor * tagsColor;
+
+@property (strong, nonatomic) UIImage * seperatorLine;
+
 @end
 
 @implementation CKHeadlinesViewController
@@ -26,8 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor =[UIColor colorWithRed:83.0/255.0 green:108.0/255.0 blue:148.0/255.0 alpha:0.8f];
-    //self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,36 +54,73 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 6;
+    return 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"HeadlineCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    UITextView * cellTextView = (UITextView *)[cell viewWithTag:1];
-    cellTextView.font = [UIFont fontWithName:@"DuruSans-Regular" size:14.0f];
-    cellTextView.textColor = [UIColor colorWithRed:32.5/255.0 green:40.0/255.0 blue:42.5/255.0 alpha:1.0f];
+    UILabel * headlineLabel = (UILabel *)[cell viewWithTag:1];
+    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+
+    paragraphStyle.lineSpacing = 3.0f;
+    
+    headlineLabel.attributedText = [[NSAttributedString alloc]
+                                       initWithString:@"Why Is The American Dream Dead In The South?" attributes: @{
+                                       NSFontAttributeName: self.headlineFont,
+                                       NSForegroundColorAttributeName: self.headlineColor,
+                                       NSKernAttributeName: @0.33,
+                                       NSParagraphStyleAttributeName: paragraphStyle}];
+    
+    UILabel * tagsLabel = (UILabel *)[cell viewWithTag:2];
+    tagsLabel.attributedText = [[NSAttributedString alloc]
+                                initWithString:@"Politics, Economics, Education"
+                                attributes:@{
+                                NSFontAttributeName: self.tagsFont,
+                                NSForegroundColorAttributeName: self.tagsColor,
+                                NSKernAttributeName: @0.33}];
+    
+    UIImageView * lineImageView = (UIImageView *)[cell viewWithTag:3];
+    lineImageView.backgroundColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0f];
     return cell;
 }
 
-#define HEADER_VIEW_HEIGHT 30.0
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView * headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, HEADER_VIEW_HEIGHT)];
-    headerView.backgroundColor = [UIColor colorWithRed:83.0/255.0 green:108.0/255.0 blue:148.0/255.0 alpha:0.8f];
-    UILabel * headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0, 5.0, 320.0, 20.0)];
-    headerLabel.text = @"Top News Selected For You";
-    headerLabel.textColor = [UIColor whiteColor];
-    headerLabel.backgroundColor = [UIColor clearColor];
-    [headerView addSubview:headerLabel];
-    return headerView;
+-(UIFont *)headlineFont{
+    if (!_headlineFont){
+        _headlineFont = [UIFont fontWithName:@"SourceSansPro-Regular" size:15.0f];
+        
+    }
+    return _headlineFont;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return HEADER_VIEW_HEIGHT;
+-(UIColor *)headlineColor{
+    if (!_headlineColor){
+        _headlineColor = [UIColor colorWithRed:18.0/255.0 green:20.0/255.0 blue:23.0/255.0 alpha:1.0f];
+    }
+    return _headlineColor;
+}
+
+-(UIFont *)tagsFont{
+    if (!_tagsFont){
+        _tagsFont = [UIFont fontWithName:@"SourceSansPro-Regular" size:12.0f];
+    }
+    return _tagsFont;
+}
+
+-(UIColor *)tagsColor{
+    if (!_tagsColor){
+        _tagsColor = [UIColor colorWithRed:95.0/255.0 green:101.0/255.0 blue:112.0/255.0 alpha:1.0f];
+    }
+    return _tagsColor;
+}
+
+-(UIImage *)seperatorLine{
+    if (!_seperatorLine){
+        _seperatorLine = [UIImage imageNamed:@"Line"];
+        NSLog(@"%f, %f", _seperatorLine.size.width, _seperatorLine.size.height);
+    }
+    return _seperatorLine;
 }
 
 @end

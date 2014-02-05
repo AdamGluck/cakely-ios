@@ -22,7 +22,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BG"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                   NSFontAttributeName: [UIFont fontWithName:@"SourceSansPro-Light" size:17.0],
+                                   NSForegroundColorAttributeName: [UIColor whiteColor],
+                                   NSKernAttributeName : @1.0}];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     return YES;
 }
 							
