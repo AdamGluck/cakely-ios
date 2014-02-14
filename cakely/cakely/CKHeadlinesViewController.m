@@ -7,6 +7,7 @@
 //
 
 #import "CKHeadlinesViewController.h"
+#import "ArticleAnimation.h"
 
 @interface CKHeadlinesViewController () <UIGestureRecognizerDelegate>
 
@@ -17,6 +18,8 @@
 @property (strong, nonatomic) UIColor * tagsColor;
 
 @property (strong, nonatomic) UIImage * seperatorLine;
+
+@property (strong, nonatomic) ArticleAnimation * animation;
 
 @end
 
@@ -34,6 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.delegate = self;
     self.navigationController.navigationBar.translucent = NO;
 }
 
@@ -54,7 +58,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 50;
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -66,8 +70,9 @@
 
     paragraphStyle.lineSpacing = 3.0f;
     
+    NSString * contentString = [NSString stringWithFormat:@"Why Is The American Dream Dead In The South? %i", indexPath.row];
     headlineLabel.attributedText = [[NSAttributedString alloc]
-                                       initWithString:@"Why Is The American Dream Dead In The South?" attributes: @{
+                                       initWithString:contentString attributes: @{
                                        NSFontAttributeName: self.headlineFont,
                                        NSForegroundColorAttributeName: self.headlineColor,
                                        NSKernAttributeName: @0.33,
@@ -83,8 +88,41 @@
     
     UIImageView * lineImageView = (UIImageView *)[cell viewWithTag:3];
     lineImageView.backgroundColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0f];
+    
     return cell;
 }
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    self.animation.selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+    self.animation.contentOffset = tableView.contentOffset;
+    [self pushContentController];
+}
+
+#pragma mark - Presentation methods
+
+-(void)pushContentController {
+    UIViewController * contentController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"contentController"];
+    [self.navigationController pushViewController:contentController animated:YES];
+}
+
+#pragma mark - Navigation controller delegate
+
+-(id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
+    switch (operation) {
+        case UINavigationControllerOperationPush:
+            self.animation.animationType = AnimationTypePresent;
+            return self.animation;
+        case UINavigationControllerOperationPop:
+            self.animation.animationType = AnimationTypeDismiss;
+            return self.animation;
+        default: return nil;
+    }
+}
+
+#pragma mark - Lazy Instantiation
 
 -(UIFont *)headlineFont{
     if (!_headlineFont){
@@ -118,9 +156,15 @@
 -(UIImage *)seperatorLine{
     if (!_seperatorLine){
         _seperatorLine = [UIImage imageNamed:@"Line"];
-        NSLog(@"%f, %f", _seperatorLine.size.width, _seperatorLine.size.height);
     }
     return _seperatorLine;
+}
+
+-(ArticleAnimation *)animation{
+    if (!_animation){
+        _animation = [[ArticleAnimation alloc] init];
+    }
+    return _animation;
 }
 
 @end

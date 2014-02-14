@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CKHeadlinesViewController : UITableViewController
+@interface CKHeadlinesViewController : UITableViewController <UIViewControllerTransitioningDelegate, UINavigationControllerDelegate>
 
 @end
