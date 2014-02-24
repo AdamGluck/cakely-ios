@@ -8,6 +8,7 @@
 
 #import "CKAppDelegate.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import <Parse/Parse.h>
 
 @implementation CKAppDelegate
 
@@ -22,6 +23,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // configure parse
+    [Parse setApplicationId:@"GUZMKmB4e7viLrvglj3KZDL22dwB1JYAQOVQ24fl"
+                  clientKey:@"j7gWgiW0yODagwaKJaLfZYtMDaedb0x9SYkAxcBP"];
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+     UIRemoteNotificationTypeAlert|
+     UIRemoteNotificationTypeSound];
+    
+    //configure nav bar
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BG"] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                    NSFontAttributeName: [UIFont fontWithName:@"SourceSansPro-Light" size:17.0],
@@ -29,6 +38,23 @@
                                    NSKernAttributeName : @1.0}];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     return YES;
+}
+
+
+// configure push notifications
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation addUniqueObject:@"TopArticles" forKey:@"channels"];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

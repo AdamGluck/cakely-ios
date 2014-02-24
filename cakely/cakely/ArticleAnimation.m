@@ -33,7 +33,7 @@
         self.fromViewController.view.alpha = 0.0f;
         
         // set base toViewController alpha so animation looks better
-        self.toViewController.view.alpha = 0.4f;
+        self.toViewController.view.alpha = 0.2f;
         
         // woo hoo!
         [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
@@ -64,7 +64,7 @@
     UIImageView * belowCellImageView = [self belowCellImageView:selectedCellFrameInView];
     [self.containerView insertSubview:belowCellImageView aboveSubview:self.fromViewController.view];
     
-    // hide view so just images
+    //hide view so just images
     //self.fromViewController.view.center = CGPointMake(self.fromViewController.view.center.x, self.fromViewController.view.center.y + self.fromViewController.view.frame.size.height);
     self.fromViewController.view.alpha = 0.0f;
     
@@ -118,7 +118,7 @@
 
 #pragma mark - screen image helper functions
 
--(UIImage *) imageWithView:(UIView *)view {
+-(UIImage *)imageWithView:(UIView *)view {
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.bounds.size.width, view.bounds.size.height), view.opaque, 0.0);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
