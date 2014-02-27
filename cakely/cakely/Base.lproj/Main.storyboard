@@ -111,7 +111,7 @@
                                     <outlet property="delegate" destination="ICd-ft-j8a" id="MsO-ZW-YMd"/>
                                 </connections>
                             </webView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bottom_bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="YsZ-lh-bgl">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bottom_bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="YsZ-lh-bgl">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -124,7 +124,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </progressView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="222" translatesAutoresizingMaskIntoConstraints="NO" id="2JT-D3-NT1">
-                                        <rect key="frame" x="49" y="130" width="222" height="120"/>
+                                        <rect key="frame" x="49" y="125" width="222" height="120"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <string key="text">With the creation of the Chicago Innovation Exchange (CIE), University of Chicago hopes to create a new entrepreneurship hub on the South Side. It will feature an open area for enrepreneurs to exchange ideas with academics and scientists...</string>
                                         <fontDescription key="fontDescription" name="TimesNewRomanPSMT" family="Times New Roman" pointSize="16"/>
@@ -160,9 +160,9 @@
                         <outlet property="articleLoadingBar" destination="MtP-og-6eJ" id="9ge-Ve-SZA"/>
                         <outlet property="coverLoadingView" destination="DFN-lN-Jpe" id="VBn-5T-RLp"/>
                         <outlet property="loadingLabel" destination="ffm-xe-MDq" id="QMP-1D-B8S"/>
-                        <outlet property="navigationBar" destination="DFN-lN-Jpe" id="M8d-Vs-a3h"/>
                         <outlet property="previewLabel" destination="2JT-D3-NT1" id="eL4-3w-CYN"/>
                         <outlet property="webView" destination="B8T-0P-YmT" id="lW7-QO-3In"/>
+                        <outlet property="webViewNavigationBar" destination="YsZ-lh-bgl" id="Z53-yW-jgz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vqN-5v-b0W" userLabel="First Responder" sceneMemberID="firstResponder"/>

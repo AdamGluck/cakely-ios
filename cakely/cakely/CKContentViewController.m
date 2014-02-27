@@ -15,7 +15,9 @@
 @property (weak, nonatomic) IBOutlet UIView *coverLoadingView;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) NSTimer * timer;
-@property (weak, nonatomic) IBOutlet UIView *navigationBar;
+@property (weak, nonatomic) IBOutlet UIImageView *webViewNavigationBar;
+@property (assign, nonatomic) BOOL webViewFinishedLoadingFirstTime;
+
 
 // navigation bar buttons
 // TODO: Make a seperate class for this
@@ -30,12 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.webViewFinishedLoadingFirstTime = NO;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(tickProgressBar:) userInfo:nil repeats:YES];
     [self configureLoadingBar];
     [self configureLoadingLabel];
     [self configurePreviewLabel];
     [self configureTapGesture];
-    [self configureUIWebViewNavigationBar];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -72,45 +74,47 @@
 
 -(void)configureUIWebViewNavigationBar
 {
-    CGSize buttonSize = CGSizeMake(21.0, 13.0);
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(16.0, self.navigationBar.center.y, buttonSize.width, buttonSize.height)];
+    CGSize buttonSize = CGSizeMake(22.0, 22.0);
+    CGFloat buttonOriginY = (self.webViewNavigationBar.frame.size.height - buttonSize.height) / 2 ;
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(8.0, buttonOriginY, buttonSize.width, buttonSize.height)];
     [self.backButton setImage:[UIImage imageNamed:@"Safari_Back_Not_Selectable"] forState:UIControlStateDisabled];
     [self.backButton setImage:[UIImage imageNamed:@"Safari_Back_Selectable"] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backSelected:) forControlEvents:UIControlEventTouchUpInside];
     self.backButton.enabled = NO;
-    [self.view addSubview:self.backButton];
+    [self.webViewNavigationBar addSubview:self.backButton];
     
-    self.forwardButton = [[UIButton alloc] initWithFrame:CGRectMake(58.0, self.navigationBar.center.y, buttonSize.width, buttonSize.height)];
+    self.forwardButton = [[UIButton alloc] initWithFrame:CGRectMake(70.0, buttonOriginY, buttonSize.width, buttonSize.height)];
     [self.forwardButton setImage:[UIImage imageNamed:@"Safari_Forward_Not_Selectable"] forState:UIControlStateDisabled];
     [self.forwardButton setImage:[UIImage imageNamed:@"Safari_Forward_Selectable"] forState:UIControlStateNormal];
     [self.forwardButton addTarget:self action:@selector(forwardSelected:) forControlEvents:UIControlEventTouchUpInside];
     self.forwardButton.enabled = NO;
-    [self.view addSubview:self.forwardButton];
-    
+    [self.webViewNavigationBar addSubview:self.forwardButton];
 }
 
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [self handleWebViewLoading];
+    if (!self.webViewFinishedLoadingFirstTime){
+        [self handleWebViewLoadingFirstTime];
+    }
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     self.backButton.enabled = webView.canGoBack;
     self.forwardButton.enabled = webView.canGoForward;
-    
     return YES;
 }
 
 #pragma mark - Loading Sequence Helpers
 
-
--(void)handleWebViewLoading
+-(void)handleWebViewLoadingFirstTime
 {
+    self.webViewFinishedLoadingFirstTime = YES;
     [self.timer invalidate];
     self.articleLoadingBar.progress = 1.0;
-    [UIView animateWithDuration:0.5 delay:0.3 options:UIViewAnimationOptionAllowAnimatedContent animations:^{ self.coverLoadingView.alpha = 0.0; } completion:nil];
+    [self configureUIWebViewNavigationBar];
+    [UIView animateWithDuration:0.5 delay:0.3 options:UIViewAnimationOptionAllowAnimatedContent animations:^{ self.coverLoadingView.alpha = 0.0; } completion:^(BOOL finished){ self.coverLoadingView.hidden = YES;}];
 }
 
 -(void)tickProgressBar:(NSTimer *)timer
@@ -140,15 +144,38 @@
 
 -(void)hideNavigationBar:(UITapGestureRecognizer *)recognizer
 {
-    BOOL hidden = self.navigationController.navigationBarHidden;
-    [self.navigationController setNavigationBarHidden:!hidden animated:YES];
-    [[UIApplication sharedApplication] setStatusBarHidden:!hidden];
+    NSLog(@"hideNavigationBar");
+    BOOL shouldHide = !self.navigationController.navigationBarHidden;
+    CGFloat webViewNavigationBarCenterOffset;
+    
+    // This handles the view moving up this amount because of the navigation bar animation...
+    CGFloat navigationBarHeight = self.navigationController.navigationBar.frame.size.height;
+    
+    if (shouldHide){
+        webViewNavigationBarCenterOffset = navigationBarHeight + self.webViewNavigationBar.frame.size.height;
+    } else {
+        webViewNavigationBarCenterOffset = navigationBarHeight - self.webViewNavigationBar.frame.size.height;
+    }
+    [[UIApplication sharedApplication] setStatusBarHidden:shouldHide];
+    [UIView animateKeyframesWithDuration:0.35 delay:0.0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+        [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:0.2 animations:^{
+            [self.navigationController setNavigationBarHidden:shouldHide animated:NO];
+        }];
+        [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:0.35 animations:^{
+            self.webViewNavigationBar.center = CGPointMake(self.webViewNavigationBar.center.x, self.webViewNavigationBar.center.y + webViewNavigationBarCenterOffset);
+        }];
+    }completion:nil];
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    return YES;
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] && ([otherGestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] || [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])){
+        return NO;
+    } else {
+        return YES;
+    }
 }
+
 
 - (void)didReceiveMemoryWarning
 {

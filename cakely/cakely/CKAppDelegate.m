@@ -42,7 +42,6 @@
 
 -(void)configureRootViewController
 {
-    [[CKServerInteraction sharedServer] setLoginStatus:NO];
     if (![[CKServerInteraction sharedServer] isLoggedIn]){
         CKLoginViewController * loginController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"loginController"];
         UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:loginController];
