@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface CKContentViewController : UIViewController
-
+@property (strong, nonatomic) NSURL * contentURL;
 @end

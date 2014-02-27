@@ -7,7 +7,7 @@
         <!--Login View Controller-->
         <scene sceneID="A1S-d8-odg">
             <objects>
-                <viewController id="BgK-tG-pFS" customClass="CKLoginViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginController" id="BgK-tG-pFS" customClass="CKLoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CO7-wi-NE4"/>
                         <viewControllerLayoutGuide type="bottom" id="aTP-hL-t5X"/>
@@ -17,8 +17,14 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eul-0o-eIZ" customClass="FBLoginView">
-                                <rect key="frame" x="45" y="348" width="230" height="60"/>
+                                <rect key="frame" x="45" y="377" width="230" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="taP-Ie-zGD">
+                                        <rect key="frame" x="97" y="6" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="delegate" destination="BgK-tG-pFS" id="QBv-TF-wS6"/>
@@ -27,10 +33,15 @@
                         </subviews>
                         <color key="backgroundColor" red="0.066666666669999999" green="0.090196078430000007" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <navigationItem key="navigationItem" id="cVp-vw-Aym"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="taP-Ie-zGD" id="OCC-Ca-kmi"/>
+                        <outlet property="fbLoginView" destination="eul-0o-eIZ" id="z4F-xd-TtC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HH5-j6-8UB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-193" y="-200"/>
+            <point key="canvasLocation" x="-633" y="-216"/>
         </scene>
         <!--Headlines View Controller - Curated-->
         <scene sceneID="TDi-Eu-5dB">
@@ -176,8 +187,9 @@
         <!--Navigation Controller-->
         <scene sceneID="wRo-gP-Ib6">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="TNJ-SR-Dip" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="initialController" automaticallyAdjustsScrollViewInsets="NO" id="TNJ-SR-Dip" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="dji-1A-R1b"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qOK-as-x4V">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

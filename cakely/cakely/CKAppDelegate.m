@@ -9,53 +9,82 @@
 #import "CKAppDelegate.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import <Parse/Parse.h>
+#import "CKServerInteraction.h"
+#import "CKLoginViewController.h"
 
 @implementation CKAppDelegate
+
+#pragma mark - app launching methods
 
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
-    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
-    return wasHandled;
+    return [FBSession.activeSession handleOpenURL:url];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // configure parse
+    // configure parse remote notifications
     [Parse setApplicationId:@"GUZMKmB4e7viLrvglj3KZDL22dwB1JYAQOVQ24fl"
                   clientKey:@"j7gWgiW0yODagwaKJaLfZYtMDaedb0x9SYkAxcBP"];
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
      UIRemoteNotificationTypeAlert|
      UIRemoteNotificationTypeSound];
     
-    //configure nav bar
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BG"] forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                   NSFontAttributeName: [UIFont fontWithName:@"SourceSansPro-Light" size:17.0],
-                                   NSForegroundColorAttributeName: [UIColor whiteColor],
-                                   NSKernAttributeName : @1.0}];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [self configureNavBar];
+    [self configureRootViewController];
     return YES;
 }
 
+#pragma mark - initial configuration methods
 
-// configure push notifications
+-(void)configureRootViewController
+{
+    [[CKServerInteraction sharedServer] setLoginStatus:NO];
+    if (![[CKServerInteraction sharedServer] isLoggedIn]){
+        CKLoginViewController * loginController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"loginController"];
+        UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:loginController];
+        self.window.rootViewController = navigation;
+    }
+}
+
+-(void)configureNavBar
+{
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BG"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSFontAttributeName: [UIFont fontWithName:@"SourceSansPro-Light" size:17.0],
+                                                           NSForegroundColorAttributeName: [UIColor whiteColor],
+                                                           NSKernAttributeName : @1.0}];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+#pragma mark - register device for remote notifications
+
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation addUniqueObject:@"TopArticles" forKey:@"channels"];
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
+    
+    // stores the phone id
+    [[CKServerInteraction sharedServer] storeDeviceToken:currentInstallation.deviceToken];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    [[CKServerInteraction sharedServer] storeDeviceToken:@""];
 }
 
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [PFPush handlePush:userInfo];
 }
+
+#pragma mark - additional boilerplate
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {

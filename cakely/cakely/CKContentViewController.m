@@ -20,7 +20,6 @@
 
 @implementation CKContentViewController
 
-
 #pragma mark - view loaded information
 - (void)viewDidLoad
 {
@@ -31,7 +30,8 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com"]]];
+    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:self.contentURL];
+    [self.webView loadRequest:urlRequest];
 }
 
 #pragma mark - loading sequence helpers

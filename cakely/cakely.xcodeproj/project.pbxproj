@@ -18,6 +18,8 @@
 		0F411E7F18B7D7D200768B2B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F411E7E18B7D7D200768B2B /* StoreKit.framework */; };
 		0F411E8118B7D7D900768B2B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F411E8018B7D7D900768B2B /* SystemConfiguration.framework */; };
 		0F411E8418BB9F9300768B2B /* CKContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F411E8318BB9F9300768B2B /* CKContentViewController.m */; };
+		0F411E8718BC07E600768B2B /* CKServerInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F411E8618BC07E600768B2B /* CKServerInteraction.m */; };
+		0F411E8D18BF9BD400768B2B /* CKArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F411E8C18BF9BD400768B2B /* CKArticle.m */; };
 		0F66785A1895AF25006F27D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6678591895AF25006F27D3 /* Foundation.framework */; };
 		0F66785C1895AF25006F27D3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F66785B1895AF25006F27D3 /* CoreGraphics.framework */; };
 		0F66785E1895AF25006F27D3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F66785D1895AF25006F27D3 /* UIKit.framework */; };
@@ -68,6 +70,10 @@
 		0F411E8018B7D7D900768B2B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0F411E8218BB9F9300768B2B /* CKContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKContentViewController.h; sourceTree = "<group>"; };
 		0F411E8318BB9F9300768B2B /* CKContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKContentViewController.m; sourceTree = "<group>"; };
+		0F411E8518BC07E600768B2B /* CKServerInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKServerInteraction.h; sourceTree = "<group>"; };
+		0F411E8618BC07E600768B2B /* CKServerInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKServerInteraction.m; sourceTree = "<group>"; };
+		0F411E8B18BF9BD400768B2B /* CKArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKArticle.h; sourceTree = "<group>"; };
+		0F411E8C18BF9BD400768B2B /* CKArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKArticle.m; sourceTree = "<group>"; };
 		0F6678561895AF25006F27D3 /* cakely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cakely.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F6678591895AF25006F27D3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0F66785B1895AF25006F27D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -137,6 +143,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F411E8818BC07F900768B2B /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				0F411E8218BB9F9300768B2B /* CKContentViewController.h */,
+				0F411E8318BB9F9300768B2B /* CKContentViewController.m */,
+				0F667A761895B6AE006F27D3 /* CKHeadlinesViewController.h */,
+				0F667A771895B6AE006F27D3 /* CKHeadlinesViewController.m */,
+				0F66786E1895AF25006F27D3 /* CKLoginViewController.h */,
+				0F66786F1895AF25006F27D3 /* CKLoginViewController.m */,
+			);
+			name = VC;
+			sourceTree = "<group>";
+		};
+		0F411E8918BC080600768B2B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0F411E8518BC07E600768B2B /* CKServerInteraction.h */,
+				0F411E8618BC07E600768B2B /* CKServerInteraction.m */,
+				0F411E8B18BF9BD400768B2B /* CKArticle.h */,
+				0F411E8C18BF9BD400768B2B /* CKArticle.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		0F411E8A18BC081C00768B2B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0F66786B1895AF25006F27D3 /* Main.storyboard */,
+				0F68DDBA18A4580C00348C7E /* ArticleAnimation.h */,
+				0F68DDBB18A4580D00348C7E /* ArticleAnimation.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		0F66784D1895AF25006F27D3 = {
 			isa = PBXGroup;
 			children = (
@@ -183,15 +223,9 @@
 			children = (
 				0F6678681895AF25006F27D3 /* CKAppDelegate.h */,
 				0F6678691895AF25006F27D3 /* CKAppDelegate.m */,
-				0F66786B1895AF25006F27D3 /* Main.storyboard */,
-				0F411E8218BB9F9300768B2B /* CKContentViewController.h */,
-				0F411E8318BB9F9300768B2B /* CKContentViewController.m */,
-				0F667A761895B6AE006F27D3 /* CKHeadlinesViewController.h */,
-				0F667A771895B6AE006F27D3 /* CKHeadlinesViewController.m */,
-				0F68DDBA18A4580C00348C7E /* ArticleAnimation.h */,
-				0F68DDBB18A4580D00348C7E /* ArticleAnimation.m */,
-				0F66786E1895AF25006F27D3 /* CKLoginViewController.h */,
-				0F66786F1895AF25006F27D3 /* CKLoginViewController.m */,
+				0F411E8A18BC081C00768B2B /* View */,
+				0F411E8918BC080600768B2B /* Model */,
+				0F411E8818BC07F900768B2B /* VC */,
 				0F6678711895AF25006F27D3 /* Images.xcassets */,
 				0F6678601895AF25006F27D3 /* Supporting Files */,
 			);
@@ -350,11 +384,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F411E8D18BF9BD400768B2B /* CKArticle.m in Sources */,
 				0F667A781895B6AE006F27D3 /* CKHeadlinesViewController.m in Sources */,
 				0F66786A1895AF25006F27D3 /* CKAppDelegate.m in Sources */,
 				0F6678661895AF25006F27D3 /* main.m in Sources */,
 				0F68DDBC18A4580D00348C7E /* ArticleAnimation.m in Sources */,
 				0F411E8418BB9F9300768B2B /* CKContentViewController.m in Sources */,
+				0F411E8718BC07E600768B2B /* CKServerInteraction.m in Sources */,
 				0F6678701895AF25006F27D3 /* CKLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

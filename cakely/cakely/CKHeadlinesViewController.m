@@ -8,18 +8,19 @@
 
 #import "CKHeadlinesViewController.h"
 #import "ArticleAnimation.h"
+#import "CKServerInteraction.h"
+#import "CKArticle.h"
+#import "CKContentViewController.h"
 
-@interface CKHeadlinesViewController () <UIGestureRecognizerDelegate>
+@interface CKHeadlinesViewController () <UIGestureRecognizerDelegate, CKServerInteractionDelegate>
 
 @property (strong, nonatomic) UIFont * headlineFont;
 @property (strong, nonatomic) UIColor * headlineColor;
-
 @property (strong, nonatomic) UIFont * tagsFont;
 @property (strong, nonatomic) UIColor * tagsColor;
-
 @property (strong, nonatomic) UIImage * seperatorLine;
-
 @property (strong, nonatomic) ArticleAnimation * animation;
+@property (strong, nonatomic) NSArray * articles;
 
 @end
 
@@ -39,48 +40,66 @@
     [super viewDidLoad];
     self.navigationController.delegate = self;
     self.navigationController.navigationBar.translucent = NO;
+    [CKServerInteraction sharedServer].delegate = self;
+    [[CKServerInteraction sharedServer] getUserArticles:nil];
+}
+
+-(void)userArticleResponse:(NSHTTPURLResponse *)response data:(NSArray *)data error:(NSError *)error
+{
+    if (!error){
+        NSMutableArray * mutableArticles = [NSMutableArray array];
+        for (NSDictionary * articleDictionary in data){
+            CKArticle * article = [[CKArticle alloc] init];
+            article.title = articleDictionary[@"title"];
+            article.description = articleDictionary[@"description"];
+            article.url = [NSURL URLWithString:articleDictionary[@"url"]];
+            [mutableArticles addObject:article];
+        }
+        self.articles = [mutableArticles copy];
+        [self.tableView reloadData];
+    } else {
+        [[CKServerInteraction sharedServer] getUserArticles:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return 10;
+    return self.articles.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"HeadlineCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    CKArticle * article = (CKArticle *)self.articles[indexPath.row];
     UILabel * headlineLabel = (UILabel *)[cell viewWithTag:1];
     NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
 
     paragraphStyle.lineSpacing = 3.0f;
     
-    NSString * contentString = [NSString stringWithFormat:@"Why Is The American Dream Dead In The South? %i", indexPath.row];
     headlineLabel.attributedText = [[NSAttributedString alloc]
-                                       initWithString:contentString attributes: @{
+                                       initWithString:article.title attributes: @{
                                        NSFontAttributeName: self.headlineFont,
                                        NSForegroundColorAttributeName: self.headlineColor,
                                        NSKernAttributeName: @0.33,
                                        NSParagraphStyleAttributeName: paragraphStyle}];
     
-    UILabel * tagsLabel = (UILabel *)[cell viewWithTag:2];
-    tagsLabel.attributedText = [[NSAttributedString alloc]
-                                initWithString:@"Politics, Economics, Education"
+    UILabel * descriptionLabel = (UILabel *)[cell viewWithTag:2];
+    descriptionLabel.attributedText = [[NSAttributedString alloc]
+                                initWithString:article.description
                                 attributes:@{
                                 NSFontAttributeName: self.tagsFont,
                                 NSForegroundColorAttributeName: self.tagsColor,
@@ -94,18 +113,28 @@
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     self.animation.selectedCell = [tableView cellForRowAtIndexPath:indexPath];
     self.animation.contentOffset = tableView.contentOffset;
     [self pushContentController];
 }
 
-#pragma mark - Presentation methods
+#pragma mark - Push Methods
 
 -(void)pushContentController {
     UIViewController * contentController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"contentController"];
     [self.navigationController pushViewController:contentController animated:YES];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.destinationViewController isKindOfClass:[CKContentViewController class]]){
+        NSIndexPath * selectedIndexPath = [self.tableView indexPathForSelectedRow];
+        CKArticle * article = self.articles[selectedIndexPath.row];
+        CKContentViewController * contentController = (CKContentViewController *)segue.destinationViewController;
+        contentController.contentURL = article.url;
+    }
 }
 
 #pragma mark - Navigation controller delegate
@@ -127,7 +156,6 @@
 -(UIFont *)headlineFont{
     if (!_headlineFont){
         _headlineFont = [UIFont fontWithName:@"SourceSansPro-Regular" size:15.0f];
-        
     }
     return _headlineFont;
 }
@@ -165,6 +193,14 @@
         _animation = [[ArticleAnimation alloc] init];
     }
     return _animation;
+}
+
+-(NSArray *)articles
+{
+    if (!_articles){
+        _articles = [NSArray array];
+    }
+    return _articles;
 }
 
 @end

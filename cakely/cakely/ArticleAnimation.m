@@ -19,7 +19,6 @@
 @implementation ArticleAnimation 
 
 -(void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    
     self.containerView = [transitionContext containerView];
     self.fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     self.toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
