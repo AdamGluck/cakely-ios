@@ -21,6 +21,7 @@
 @property (strong, nonatomic) UIImage * seperatorLine;
 @property (strong, nonatomic) ArticleAnimation * animation;
 @property (strong, nonatomic) NSArray * articles;
+@property (strong, nonatomic) CKServerInteraction * server;
 
 @end
 
@@ -40,8 +41,7 @@
     [super viewDidLoad];
     self.navigationController.delegate = self;
     self.navigationController.navigationBar.translucent = NO;
-    [CKServerInteraction sharedServer].delegate = self;
-    [[CKServerInteraction sharedServer] getUserArticles:nil];
+    [self.server getUserArticles:nil];
 }
 
 -(void)userArticleResponse:(NSHTTPURLResponse *)response data:(NSArray *)data error:(NSError *)error
@@ -58,7 +58,7 @@
         self.articles = [mutableArticles copy];
         [self.tableView reloadData];
     } else {
-        [[CKServerInteraction sharedServer] getUserArticles:nil];
+        [self.server getUserArticles:nil];
     }
 }
 
@@ -88,8 +88,7 @@
     UILabel * headlineLabel = (UILabel *)[cell viewWithTag:1];
     NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
 
-    paragraphStyle.lineSpacing = 3.0f;
-    
+    paragraphStyle.lineSpacing = 2.0f;
     headlineLabel.attributedText = [[NSAttributedString alloc]
                                        initWithString:article.title attributes: @{
                                        NSFontAttributeName: self.headlineFont,
@@ -98,6 +97,7 @@
                                        NSParagraphStyleAttributeName: paragraphStyle}];
     
     UILabel * descriptionLabel = (UILabel *)[cell viewWithTag:2];
+    descriptionLabel.numberOfLines = 2.0;
     descriptionLabel.attributedText = [[NSAttributedString alloc]
                                 initWithString:article.description
                                 attributes:@{
@@ -114,7 +114,6 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     self.animation.selectedCell = [tableView cellForRowAtIndexPath:indexPath];
     self.animation.contentOffset = tableView.contentOffset;
     [self pushContentController];
@@ -123,18 +122,12 @@
 #pragma mark - Push Methods
 
 -(void)pushContentController {
-    UIViewController * contentController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"contentController"];
+    CKContentViewController * contentController = (CKContentViewController *)[[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"contentController"];
+    NSIndexPath * selectedIndexPath = [self.tableView indexPathForSelectedRow];
+    contentController.article = self.articles[selectedIndexPath.row];
+    [self.tableView deselectRowAtIndexPath:selectedIndexPath animated:NO];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationController pushViewController:contentController animated:YES];
-}
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.destinationViewController isKindOfClass:[CKContentViewController class]]){
-        NSIndexPath * selectedIndexPath = [self.tableView indexPathForSelectedRow];
-        CKArticle * article = self.articles[selectedIndexPath.row];
-        CKContentViewController * contentController = (CKContentViewController *)segue.destinationViewController;
-        contentController.contentURL = article.url;
-    }
 }
 
 #pragma mark - Navigation controller delegate
@@ -193,6 +186,14 @@
         _animation = [[ArticleAnimation alloc] init];
     }
     return _animation;
+}
+
+-(CKServerInteraction *)server{
+    if (!_server){
+        _server = [CKServerInteraction sharedServer];
+        _server.delegate = self;
+    }
+    return _server;
 }
 
 -(NSArray *)articles

@@ -58,6 +58,12 @@
                                                            NSForegroundColorAttributeName: [UIColor whiteColor],
                                                            NSKernAttributeName : @1.0}];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+                         setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor],
+                                                    NSFontAttributeName: [UIFont fontWithName:@"SourceSansPro-Light" size:17.0f],
+                                                    NSKernAttributeName: @1.0}
+                                       forState:UIControlStateNormal];
 }
 
 #pragma mark - register device for remote notifications

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CKArticle.h"
 
 @interface CKContentViewController : UIViewController
-@property (strong, nonatomic) NSURL * contentURL;
+@property (strong, nonatomic) CKArticle *article;
 @end

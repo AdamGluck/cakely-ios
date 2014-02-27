@@ -12,7 +12,7 @@
 #import "CKAppDelegate.h"
 #import "CKHeadlinesViewController.h"
 
-@interface CKLoginViewController () <CKServerInteractionDelegate, FBLoginViewDelegate>
+@interface CKLoginViewController () <CKServerInteractionDelegate, FBLoginViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet FBLoginView *fbLoginView;
 @property (strong, nonatomic) CKServerInteraction * server;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -20,6 +20,12 @@
 @end
 
 @implementation CKLoginViewController
+
+typedef NS_ENUM(NSInteger, CKAlertViewTags){
+    AlertTagFacebookFailed = 1,
+    AlertTagNoConnection = 2
+};
+
 
 - (void)viewDidLoad
 {
@@ -32,7 +38,6 @@
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView
                             user:(id<FBGraphUser>)user
 {
-    NSLog(@"fetched user");
     FBAccessTokenData * accessTokenData = [[FBSession activeSession] accessTokenData];
     NSString * accessTokenString = accessTokenData.accessToken;
     [self.server storeFBOAuthToken:accessTokenString];
@@ -42,7 +47,6 @@
 
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView
 {
-    NSLog(@"showing user");
     // post to server if we have all their data
     [self _postLoginToServer];
 }
@@ -52,6 +56,7 @@
 - (void)loginView:(FBLoginView *)loginView handleError: (NSError *)error
 {
     UIAlertView * facebookError = [[UIAlertView alloc] initWithTitle:@"Facebook error" message:@"We need you to login to Facebook so we can figure out the content you like!" delegate:self cancelButtonTitle:@"Okay!" otherButtonTitles: nil];
+    facebookError.tag = AlertTagFacebookFailed;
     [facebookError show];
 }
 
@@ -60,7 +65,6 @@
     if (error.code == CKServerMissingDeviceToken){
         // store a blank device token
         // TODO: Find a better way of handling this in the future... such as testing for device token and sending
-        NSLog(@"missing device token");
         [self.server storeDeviceToken:@""];
         [self _postLoginToServer];
     }
@@ -75,23 +79,30 @@
 {
     // if not response no server connection
     if (!response){
-        NSLog(@"no response");
         UIAlertView * noConnection = [[UIAlertView alloc] initWithTitle:@"Couldn't connect to server." message:@"Please check your internet connection and re-open the app to try again." delegate:self cancelButtonTitle:@"Thanks." otherButtonTitles: nil];
+        noConnection.tag = AlertTagNoConnection;
         [noConnection show];
         [self _postLoginToServer];
         return;
     }
     
     NSInteger statusCode = response.statusCode;
-    NSLog(@"userLoginResponse = %ld", (long)statusCode);
     if (statusCode == 201){
-        NSLog(@"statusCode == 201");
         [[CKServerInteraction sharedServer] setLoginStatus:YES];
         UINavigationController * initialController = (UINavigationController *)[[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateInitialViewController];
         [[UIApplication sharedApplication] delegate].window.rootViewController = initialController;
     } else {
         // unknown error occured
         // for now just keep posting, better handling in the future
+        [self _postLoginToServer];
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertViewCancel:(UIAlertView *)alertView
+{
+    if (alertView.tag == AlertTagNoConnection){
         [self _postLoginToServer];
     }
 }
@@ -106,6 +117,7 @@
         [self handleLoginError:error];
     } else {
         self.fbLoginView.hidden = YES;
+        self.activityIndicator.hidden = NO;
         [self.activityIndicator startAnimating];
     }
 }

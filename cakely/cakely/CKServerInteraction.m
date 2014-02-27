@@ -97,20 +97,15 @@ static dispatch_once_t onceToken;
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
         NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            NSLog(@"postDataTask complete with response: %@", response);
-            NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             NSHTTPURLResponse * httpResponse = (NSHTTPURLResponse *)response;
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([self.delegate respondsToSelector:@selector(userLoginResponse:error:)])
                     [self.delegate userLoginResponse:httpResponse error:error];
             });
-            
         }];
         [postDataTask resume];
         return YES;
     }
-    NSLog(@"posting error");
     
     if (error){
         *error = [self serverInteractionLoginDetailError];
@@ -124,7 +119,6 @@ static dispatch_once_t onceToken;
 -(NSMutableURLRequest *)userLoginRequest
 {
     if ([self validateLoginDetails]){
-        NSLog(@"user details validated");
         NSURL * postURL = [NSURL URLWithString:[self userURLString]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL
                                                                cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -136,7 +130,6 @@ static dispatch_once_t onceToken;
         NSDictionary * postBody = @{@FACEBOOK_ID_KEY: [self facebookID], @FB_OAUTH_TOKEN_KEY: [self fbOAuthToken], @DEVICE_TOKEN_KEY: [self deviceToken]};
         NSData * data = [NSJSONSerialization dataWithJSONObject:postBody
                                                         options:kNilOptions error:&error];
-        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         request.HTTPBody = data;
         return request;
     }
@@ -168,7 +161,7 @@ static dispatch_once_t onceToken;
     } else if (![self deviceToken]){
         errorCode = CKServerMissingDeviceToken;
     } else if (![self facebookID] || ![self fbOAuthToken]){
-        errorCode = CKServerMissingDeviceToken;
+        errorCode = CKServerMissingFacebookData;
     } else {
         errorCode = CKServerUnknownError;
     }
@@ -181,24 +174,17 @@ static dispatch_once_t onceToken;
 -(void)getUserArticles:(NSError **)error
 {
     NSString * urlString = [NSString stringWithFormat:@"%@%@=%@", [self userURLString], @FACEBOOK_ID_KEY, [self facebookID]];
-    NSURLSessionConfiguration *sessionConfig =
-    [NSURLSessionConfiguration defaultSessionConfiguration];
-    
-    NSURLSession *session =
-    [NSURLSession sessionWithConfiguration:sessionConfig
-                                  delegate:self
-                             delegateQueue:nil];
-    NSURLSessionDataTask *jsonData = [session dataTaskWithURL:[NSURL URLWithString:urlString]
-                                            completionHandler:^(NSData *data,
-                                                                NSURLResponse *response,
-                                                                NSError *error) {
-                                                NSArray * dataResponse = (NSArray *)[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                                                if ([self.delegate respondsToSelector:@selector(userArticleResponse:data:error:)]){
-                                                    [self.delegate userArticleResponse:(NSHTTPURLResponse*)response data:dataResponse error:error];
-                                                }
-                                            }];
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    NSURLSessionDataTask *jsonData = [session dataTaskWithURL:[NSURL URLWithString:urlString]completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSArray * dataResponse = (NSArray *)[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self.delegate respondsToSelector:@selector(userArticleResponse:data:error:)]){
+                    [self.delegate userArticleResponse:(NSHTTPURLResponse*)response data:dataResponse error:error];
+                }
+            });
+    }];
     [jsonData resume];
-    
 }
 
 #pragma mark - lazy instantiation
